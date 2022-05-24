@@ -11,6 +11,8 @@
   const end = 100
   let total = 10
 
+  const $loader = get('.loader')
+
   const getPost = async () => {
     const API_URL = `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${limit}`
     const response = await fetch(API_URL)
@@ -37,9 +39,26 @@
     })
   }
 
+  const showLoader = () => {
+    $loader.classList.add('show')
+  }
+
+  const hideLoader = () => {
+    $loader.classList.remove('show')
+  }
+
   const loadPost = async () => {
-    const response = await getPost()
-    showPosts(response)
+    // 로딩 엘레먼트를 보여줌
+    showLoader()
+    try {
+      const response = await getPost()
+      showPosts(response)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      // 로딩 엘레먼트를 사라지게 함
+      hideLoader()
+    }
   }
 
   const onScroll = () => {
